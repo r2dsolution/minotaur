@@ -29,7 +29,7 @@
 		<aws-lambda-core.version>1.2.0</aws-lambda-core.version>
 		
 		<javassist.version>3.25.0-GA</javassist.version>
-        
+        <start-class>com.r2dsolution.comein.minotaur.MinotaurSpringApplication</start-class>
     </properties>
     
 	<dependencyManagement>
