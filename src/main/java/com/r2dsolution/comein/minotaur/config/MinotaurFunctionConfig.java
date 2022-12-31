@@ -13,14 +13,26 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 public class MinotaurFunctionConfig {
 	
 	@Bean
-	public Function<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> testFunction(){
+	public Function<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> getHelloWorld(){
 		System.out.println("........Hello............");
 		return request -> {
 			APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
-			response.setBody("Hello World by spring-cloud-function.");
+			response.setBody("Get event: Hello World by spring-cloud-function.");
 			return response;
 		};
 		
 	}
+	
+	@Bean
+	public Function<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> postHelloWorld(){
+		System.out.println("........Hello............");
+		return request -> {
+			
+			APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
+			response.setBody("Post event: Hello World by spring-cloud-function.");
+			return response;
+		};
+	}
+	
 
 }
