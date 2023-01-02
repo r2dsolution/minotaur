@@ -11,6 +11,7 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+
 public class ComeInAPIRequest extends APIGatewayProxyRequestEvent{
 
 	/**
@@ -29,5 +30,16 @@ public class ComeInAPIRequest extends APIGatewayProxyRequestEvent{
 		this.jsonBody = jsonBody;
 	}
 
+	private UserProfile profile;
+
+	public UserProfile getProfile() {
+		return profile;
+	}
+
+	public void setProfile(UserProfile profile) {
+		this.profile = profile;
+	}
+	
+	
 	
 }
