@@ -2,6 +2,7 @@ package com.r2dsolution.comein.minotaur;
 
 import java.util.function.Function;
 
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
@@ -13,6 +14,7 @@ import com.r2dsolution.comein.minotaur.config.MinotaurFunctionConfig;
 
 @SpringBootApplication
 @Import(MinotaurFunctionConfig.class)
+@EnableAutoConfiguration
 public class MinotaurSpringApplication {
 
 	/*
