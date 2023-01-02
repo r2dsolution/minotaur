@@ -10,6 +10,7 @@ import com.r2dsolution.comein.minotaur.function.ComeInFunction;
 import com.r2dsolution.comein.minotaur.function.ComeInMapper;
 import com.r2dsolution.comein.minotaur.function.IFunction;
 import com.r2dsolution.comein.minotaur.function.model.ComeInAPIRequest;
+import com.r2dsolution.comein.minotaur.function.model.ComeInAPIResponse;
 import com.r2dsolution.comein.minotaur.function.model.TourTicket;
 import com.r2dsolution.comein.minotaur.repository.TourTicketViewRepository;
 import com.r2dsolution.comein.minotaur.util.DateUtils;
@@ -30,11 +31,11 @@ public class LoadTourTicketByDateFunc extends ComeInFunction{
 	ComeInMapper comeInMapper;
 
 	@Override
-	public APIGatewayProxyResponseEvent execute(APIGatewayProxyRequestEvent request) throws Exception{
+	public ComeInAPIResponse execute(ComeInAPIRequest request) throws Exception{
 		
 //		TourTicketViewRepository repo = ctx.getBean(TourTicketViewRepository.class);
 //		
-		Map<String,Object> input = toJsonMap(request.getBody());
+		Map<String,Object> input = request.getJsonBody();
 		String tourDateStr = (String) input.get("tour-date");
 		int tourIdInt = (int) input.get("tour-id");
 		log("param tour-date: "+tourDateStr);
@@ -47,7 +48,7 @@ public class LoadTourTicketByDateFunc extends ComeInFunction{
 //		return output;
 		Map<String,Object> results = new HashMap<String,Object>();
 		results.put("results", comeInMapper.map((TicketView)v,new TourTicket()));
-		APIGatewayProxyResponseEvent response = toResults(results);
+		ComeInAPIResponse response = toComeInResults(results);
 		return response;
 	}
 

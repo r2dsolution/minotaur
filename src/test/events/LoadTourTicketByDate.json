@@ -1,3 +1,4 @@
 {
-	"body":"{\"tour-id\": 46, \"tour-date\":\"2022-12-27\"}"
+	
+	"json-body":{"tour-id": 46, "tour-date":"2022-12-27"}
 }

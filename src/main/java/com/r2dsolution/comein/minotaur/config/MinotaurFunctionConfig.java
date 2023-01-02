@@ -14,6 +14,8 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.r2dsolution.comein.minotaur.function.IFunction;
 import com.r2dsolution.comein.minotaur.function.api.LoadTourTicketByDateFunc;
+import com.r2dsolution.comein.minotaur.function.model.ComeInAPIRequest;
+import com.r2dsolution.comein.minotaur.function.model.ComeInAPIResponse;
 
 @Configuration
 @ComponentScan("com.r2dsolution.comein.minotaur.function")
@@ -46,14 +48,14 @@ public class MinotaurFunctionConfig {
 	}
 	
 	@Bean
-	public Function<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> loadTourTicketByDate() throws Exception{
+	public Function<ComeInAPIRequest, ComeInAPIResponse> loadTourTicketByDate() throws Exception{
 
 		return request ->  doExecute(loadTourTicketByDateFunc,request );
 			
 	}
 	
 
-	protected APIGatewayProxyResponseEvent doExecute(IFunction func,APIGatewayProxyRequestEvent request){
+	protected ComeInAPIResponse doExecute(IFunction func,ComeInAPIRequest request){
 		try {
 			return func.execute(request);
 		} catch (Exception e) {
@@ -62,10 +64,13 @@ public class MinotaurFunctionConfig {
 		}
 	}
 
-	protected APIGatewayProxyResponseEvent errorExecute(Exception e,APIGatewayProxyRequestEvent request) {
-		APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
+	protected ComeInAPIResponse errorExecute(Exception e,ComeInAPIRequest request) {
+		ComeInAPIResponse response = new ComeInAPIResponse();
 		response.setStatusCode(200);
 		response.setBody(e.getMessage());
+		Map<String,Object> json = new HashMap<String,Object>();
+		json.put("error", e.getMessage());
+		response.setJsonBody(json );
 		Map<String,String> headers = new HashMap<String,String>();
 		headers.put("Content-Type", "application/json");
 		response.setHeaders(headers);
