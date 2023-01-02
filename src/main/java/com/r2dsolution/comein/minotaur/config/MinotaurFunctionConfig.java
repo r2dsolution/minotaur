@@ -1,5 +1,7 @@
 package com.r2dsolution.comein.minotaur.config;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +12,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
-import com.r2dsolution.comein.minotaur.function.LoadTourTicketByDateFunc;
+import com.r2dsolution.comein.minotaur.function.IFunction;
+import com.r2dsolution.comein.minotaur.function.api.LoadTourTicketByDateFunc;
 
 @Configuration
 @ComponentScan("com.r2dsolution.comein.minotaur.function")
@@ -18,7 +21,7 @@ import com.r2dsolution.comein.minotaur.function.LoadTourTicketByDateFunc;
 public class MinotaurFunctionConfig {
 	
 	@Autowired
-	LoadTourTicketByDateFunc LoadTourTicketByDateFunc;
+	LoadTourTicketByDateFunc loadTourTicketByDateFunc;
 	
 	@Bean
 	public Function<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> getHelloWorld(){
@@ -43,11 +46,29 @@ public class MinotaurFunctionConfig {
 	}
 	
 	@Bean
-	public Function<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> loadTourTicketByDate(){
-		return request -> {
-			return LoadTourTicketByDateFunc.execute(request);
-		};
+	public Function<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> loadTourTicketByDate() throws Exception{
+
+		return request ->  doExecute(loadTourTicketByDateFunc,request );
+			
 	}
 	
 
+	protected APIGatewayProxyResponseEvent doExecute(IFunction func,APIGatewayProxyRequestEvent request){
+		try {
+			return func.execute(request);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return errorExecute(e,request);
+		}
+	}
+
+	protected APIGatewayProxyResponseEvent errorExecute(Exception e,APIGatewayProxyRequestEvent request) {
+		APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
+		response.setStatusCode(200);
+		response.setBody(e.getMessage());
+		Map<String,String> headers = new HashMap<String,String>();
+		headers.put("Content-Type", "application/json");
+		response.setHeaders(headers);
+		return response;
+	}
 }

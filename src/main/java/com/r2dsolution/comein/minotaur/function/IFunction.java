@@ -5,5 +5,5 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 
 public interface IFunction {
 
-	APIGatewayProxyResponseEvent execute(APIGatewayProxyRequestEvent request);
+	APIGatewayProxyResponseEvent execute(APIGatewayProxyRequestEvent request) throws Exception;
 }
