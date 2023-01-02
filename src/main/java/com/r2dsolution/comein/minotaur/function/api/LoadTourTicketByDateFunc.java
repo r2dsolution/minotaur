@@ -4,13 +4,17 @@ import org.springframework.stereotype.Component;
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
+import com.r2dsolution.comein.minotaur.entity.view.TicketView;
 import com.r2dsolution.comein.minotaur.entity.view.TourTicketView;
 import com.r2dsolution.comein.minotaur.function.ComeInFunction;
+import com.r2dsolution.comein.minotaur.function.ComeInMapper;
 import com.r2dsolution.comein.minotaur.function.IFunction;
 import com.r2dsolution.comein.minotaur.function.model.ComeInAPIRequest;
+import com.r2dsolution.comein.minotaur.function.model.TourTicket;
 import com.r2dsolution.comein.minotaur.repository.TourTicketViewRepository;
 import com.r2dsolution.comein.minotaur.util.DateUtils;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +25,9 @@ public class LoadTourTicketByDateFunc extends ComeInFunction{
 	
 	@Autowired
 	TourTicketViewRepository tourTicketViewRepository;
+	
+	@Autowired
+	ComeInMapper comeInMapper;
 
 	@Override
 	public APIGatewayProxyResponseEvent execute(APIGatewayProxyRequestEvent request) throws Exception{
@@ -38,9 +45,9 @@ public class LoadTourTicketByDateFunc extends ComeInFunction{
 		System.out.println("tour-id: "+v.getTourId());
 //		output.put("result", ComeInMapper.map((TicketView)v,new TourTicket()));
 //		return output;
-		
-		APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
-		response.setBody("hello by date");
+		Map<String,Object> results = new HashMap<String,Object>();
+		results.put("results", comeInMapper.map((TicketView)v,new TourTicket()));
+		APIGatewayProxyResponseEvent response = toResults(results);
 		return response;
 	}
 
