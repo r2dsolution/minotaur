@@ -44,10 +44,10 @@ Globals:
       Role: !Ref CodeDeployRole
 
 Resources:
-  GetHelloWorld:
+  GetHelloWorldFunc:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Sub 'awscodestar-${ProjectId}-lambda-GetHelloWorld'
+      FunctionName: !Sub 'awscodestar-${ProjectId}-lambda-GetHelloWorldFunc'
       Handler: org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest
       Environment:
         Variables:
@@ -71,10 +71,10 @@ Resources:
             Path: /
             Method: get
 
-  PostHelloWorld:
+  PostHelloWorldFunc:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Sub 'awscodestar-${ProjectId}-lambda-PostHelloWorld'
+      FunctionName: !Sub 'awscodestar-${ProjectId}-lambda-PostHelloWorldFunc'
       Handler: org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest
       Environment:
         Variables:
@@ -98,10 +98,10 @@ Resources:
             Path: /
             Method: post
   
-  LoadTourTicketByDate:
+  LoadTourTicketByDateFunc:
     Type: AWS::Serverless::Function
     Properties:
-      FunctionName: !Sub 'awscodestar-${ProjectId}-lambda-LoadTourTicketByDate'
+      FunctionName: !Sub 'awscodestar-${ProjectId}-lambda-LoadTourTicketByDateFunc'
       Handler: org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest
       Environment:
         Variables:
