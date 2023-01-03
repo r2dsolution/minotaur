@@ -64,25 +64,13 @@ Parameters:
         },
       "path-parameters": $allParams.get('path'),
       "query-string-parameters": $allParams.get('querystring'),
-      "params" : {
-      #foreach($type in $allParams.keySet())
-          #set($params = $allParams.get($type))
-      "$type" : {
-          #foreach($paramName in $params.keySet())
-          "$paramName" : "$util.escapeJavaScript($params.get($paramName))"
-              #if($foreach.hasNext),#end
-          #end
-      }
-          #if($foreach.hasNext),#end
-      #end
-      },
       "stage-variables" : {
       #foreach($key in $stageVariables.keySet())
       "$key" : "$util.escapeJavaScript($stageVariables.get($key))"
           #if($foreach.hasNext),#end
       #end
       },
-      "context" : {
+      "request-context" : {
           "account-id" : "$context.identity.accountId",
           "api-id" : "$context.apiId",
           "api-key" : "$context.identity.apiKey",
@@ -204,8 +192,8 @@ Resources:
           DB_USERNAME: !Ref ComeInDBUsername
           DB_PASSWORD: !Ref ComeInDBPassword          
       Runtime: java11
-      Timeout: 30
-      MemorySize: 512
+      Timeout: 60
+      MemorySize: 1024
       Role:
         Fn::GetAtt:
         - LambdaExecutionRole

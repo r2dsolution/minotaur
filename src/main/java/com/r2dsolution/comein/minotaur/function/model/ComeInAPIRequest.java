@@ -16,7 +16,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 
 
-@JsonNaming(PropertyNamingStrategy.KebabCaseStrategy.class)
+
 public class ComeInAPIRequest extends APIGatewayProxyRequestEvent{
 
 	/**
