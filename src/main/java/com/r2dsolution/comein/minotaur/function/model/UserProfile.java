@@ -13,11 +13,11 @@ public class UserProfile implements Serializable{
 	
 	
 	private String email;
-	private String ref_name;
+	private String refName;
 //	private String firstname;
 //	private String lastname;
 	private String sub;
-	private String comein_id;
+	private String comeinId;
 	
 	public String getEmail() {
 		return email;
@@ -43,21 +43,21 @@ public class UserProfile implements Serializable{
 	public void setSub(String sub) {
 		this.sub = sub;
 	}
+	public String getRefName() {
+		return refName;
+	}
+	public void setRefName(String refName) {
+		this.refName = refName;
+	}
+	public String getComeinId() {
+		return comeinId;
+	}
+	public void setComeinId(String comeinId) {
+		this.comeinId = comeinId;
+	}
 	
 
-	public String getComein_id() {
-		return comein_id;
-	}
-	public void setComein_id(String comein_id) {
-		this.comein_id = comein_id;
-	}
-	public String getRef_name() {
-		return ref_name;
-	}
-	public void setRef_name(String ref_name) {
-		this.ref_name = ref_name;
-	}
-
+	
 	
 	
 

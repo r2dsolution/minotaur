@@ -57,11 +57,13 @@ Parameters:
       "path" : "$context.resourcePath",
       "profile":{
          "email" : "$context.authorizer.claims.email",
-         "comein_id":"$context.authorizer.claims['custom:comein_id']",
-         "ref_name" : "$context.authorizer.claims.name",
+         "comein-id":"$context.authorizer.claims['custom:comein_id']",
+         "ref-name" : "$context.authorizer.claims.name",
          "sub":"$context.authorizer.claims.sub"
          
         },
+      "path-parameters": $allParams.get('path'),
+      "query-string-parameters": $allParams.get('querystring'),
       "params" : {
       #foreach($type in $allParams.keySet())
           #set($params = $allParams.get($type))

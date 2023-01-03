@@ -10,8 +10,13 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 
+
+@JsonNaming(PropertyNamingStrategy.KebabCaseStrategy.class)
 public class ComeInAPIRequest extends APIGatewayProxyRequestEvent{
 
 	/**
@@ -21,7 +26,7 @@ public class ComeInAPIRequest extends APIGatewayProxyRequestEvent{
 	
 	private Map<String,Object> jsonBody = new HashMap<String,Object>();
 
-	@JsonProperty("json-body")
+	
 	public Map<String, Object> getJsonBody() {
 		return jsonBody;
 	}
