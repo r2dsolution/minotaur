@@ -1,4 +1,4 @@
-package com.r2dsolution.comein.minotaur.function.model;
+package com.r2dsolution.comein.minotaur.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

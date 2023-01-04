@@ -45,6 +45,12 @@ public class ComeInAPIRequest extends APIGatewayProxyRequestEvent{
 		this.profile = profile;
 	}
 	
+	public <T extends Object> T toQuery(String key,Class<T> clazz) {
+		return (T)getQueryStringParameters().get(key);
+	}
 	
+	public String toQueryStr(String key) {
+		return toQuery(key,String.class);
+	}
 	
 }

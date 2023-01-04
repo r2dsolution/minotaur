@@ -52,15 +52,14 @@ Parameters:
     Default: |
       #set($allParams = $input.params())
       {
-      "body" : $input.body,
+      "body" : "$util.escapeJavaScript($input.body)",
       "json-body" : $input.json('$'),
       "path" : "$context.resourcePath",
       "profile":{
          "email" : "$context.authorizer.claims.email",
          "comein-id":"$context.authorizer.claims['custom:comein_id']",
          "ref-name" : "$context.authorizer.claims.name",
-         "sub":"$context.authorizer.claims.sub"
-         
+         "sub":"$context.authorizer.claims.sub"   
         },
       "path-parameters": $allParams.get('path'),
       "query-string-parameters": $allParams.get('querystring'),
@@ -236,9 +235,70 @@ Resources:
             ResponseTemplates:
               'application/json' : !Ref ComeInResponseTemplate
       MethodResponses:
-        - StatusCode: 200
-        
+        - StatusCode: 200     
 # End Function - LoadTourTicketByDateFunc  
+
+# Start Function - ListBookingByEmailFunc  
+  ListBookingByEmailFunc:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub 'awscodestar-${ProjectId}-lambda-ListBookingByEmailFunc'
+      Handler: org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest
+      Environment:
+        Variables:
+          spring_cloud_function_definition: listBookingByEmail
+          DB_HOST: !Ref ComeInDBHost
+          DB_PORT: !Ref ComeInDBPort
+          DB_INSTANCE: !Ref ComeInDBInstance
+          DB_USERNAME: !Ref ComeInDBUsername
+          DB_PASSWORD: !Ref ComeInDBPassword          
+      Runtime: java11
+      Timeout: 60
+      MemorySize: 1024
+      Role:
+        Fn::GetAtt:
+        - LambdaExecutionRole
+        - Arn
+
+  ListBookingByEmailPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref ListBookingByEmailFunc
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ComeInRestApi}/*/POST/hotel-bookings
+
+  ListBookingByEmailResource:
+    Type: 'AWS::ApiGateway::Resource'
+    Properties:
+      RestApiId: !Ref ComeInRestApi
+      ParentId: !GetAtt 
+        - ComeInRestApi
+        - RootResourceId
+      PathPart: hotel-bookings
+
+  ListBookingByEmailMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref ComeInRestApi
+      ResourceId: !Ref ListBookingByEmailResource
+      HttpMethod: POST
+      AuthorizationType: COGNITO_USER_POOLS
+      AuthorizerId: !Ref ComeInAuthorizer
+      Integration:
+        Type: AWS
+        IntegrationHttpMethod: POST
+        Uri:  !Join ['', ['arn:aws:apigateway:', !Ref AWS::Region, ':lambda:path/2015-03-31/functions/', !GetAtt ListBookingByEmailFunc.Arn, '/invocations']]
+        PassthroughBehavior: WHEN_NO_TEMPLATES
+        RequestTemplates: 
+          'application/json': !Ref ComeInRequestTemplate
+        IntegrationResponses:
+          - StatusCode: 200
+            ResponseTemplates:
+              'application/json' : !Ref ComeInResponseTemplate
+      MethodResponses:
+        - StatusCode: 200     
+# End Function - ListBookingByEmailFunc  
                               
   LambdaExecutionRole:
     Description: Creating service role in IAM for AWS Lambda

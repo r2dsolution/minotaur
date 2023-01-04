@@ -13,17 +13,21 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.r2dsolution.comein.minotaur.function.IFunction;
+import com.r2dsolution.comein.minotaur.function.api.ListBookingByEmailFunc;
 import com.r2dsolution.comein.minotaur.function.api.LoadTourTicketByDateFunc;
 import com.r2dsolution.comein.minotaur.function.model.ComeInAPIRequest;
 import com.r2dsolution.comein.minotaur.function.model.ComeInAPIResponse;
 
 @Configuration
-@ComponentScan("com.r2dsolution.comein.minotaur.function")
+@ComponentScan({"com.r2dsolution.comein.minotaur.function","com.r2dsolution.comein.minotaur.business"})
 @EnableJpaRepositories(basePackages = "com.r2dsolution.comein.minotaur.repository")
 public class MinotaurFunctionConfig {
 	
 	@Autowired
 	LoadTourTicketByDateFunc loadTourTicketByDateFunc;
+	
+	@Autowired
+	ListBookingByEmailFunc listBookingByEmailFunc;
 	
 	@Bean
 	public Function<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> getHelloWorld(){
@@ -51,6 +55,13 @@ public class MinotaurFunctionConfig {
 	public Function<ComeInAPIRequest, ComeInAPIResponse> loadTourTicketByDate() throws Exception{
 
 		return request ->  doExecute(loadTourTicketByDateFunc,request );
+			
+	}
+	
+	@Bean
+	public Function<ComeInAPIRequest, ComeInAPIResponse> listBookingByEmail() throws Exception{
+
+		return request ->  doExecute(listBookingByEmailFunc,request );
 			
 	}
 	

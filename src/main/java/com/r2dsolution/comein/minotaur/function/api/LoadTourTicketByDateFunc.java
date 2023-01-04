@@ -7,11 +7,11 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.r2dsolution.comein.minotaur.entity.view.TicketView;
 import com.r2dsolution.comein.minotaur.entity.view.TourTicketView;
 import com.r2dsolution.comein.minotaur.function.ComeInFunction;
-import com.r2dsolution.comein.minotaur.function.ComeInMapper;
 import com.r2dsolution.comein.minotaur.function.IFunction;
 import com.r2dsolution.comein.minotaur.function.model.ComeInAPIRequest;
 import com.r2dsolution.comein.minotaur.function.model.ComeInAPIResponse;
-import com.r2dsolution.comein.minotaur.function.model.TourTicket;
+import com.r2dsolution.comein.minotaur.model.ComeInMapper;
+import com.r2dsolution.comein.minotaur.model.TourTicket;
 import com.r2dsolution.comein.minotaur.repository.TourTicketViewRepository;
 import com.r2dsolution.comein.minotaur.util.DateUtils;
 
