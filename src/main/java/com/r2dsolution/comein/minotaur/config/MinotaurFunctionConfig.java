@@ -15,6 +15,7 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.r2dsolution.comein.minotaur.function.IFunction;
 import com.r2dsolution.comein.minotaur.function.api.ListBookingByEmailFunc;
 import com.r2dsolution.comein.minotaur.function.api.LoadTourTicketByDateFunc;
+import com.r2dsolution.comein.minotaur.function.api.ViewKYCHotelBookingFunc;
 import com.r2dsolution.comein.minotaur.function.model.ComeInAPIRequest;
 import com.r2dsolution.comein.minotaur.function.model.ComeInAPIResponse;
 
@@ -28,6 +29,9 @@ public class MinotaurFunctionConfig {
 	
 	@Autowired
 	ListBookingByEmailFunc listBookingByEmailFunc;
+	
+	@Autowired
+	ViewKYCHotelBookingFunc viewKYCHotelBookingFunc;
 	
 	@Bean
 	public Function<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> getHelloWorld(){
@@ -62,6 +66,13 @@ public class MinotaurFunctionConfig {
 	public Function<ComeInAPIRequest, ComeInAPIResponse> listBookingByEmail() throws Exception{
 
 		return request ->  doExecute(listBookingByEmailFunc,request );
+			
+	}
+	
+	@Bean
+	public Function<ComeInAPIRequest, ComeInAPIResponse> viewKYCHotelBooking() throws Exception{
+
+		return request ->  doExecute(viewKYCHotelBookingFunc,request );
 			
 	}
 	

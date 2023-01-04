@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 
 @Entity(name="booking_kyc")
@@ -23,6 +25,10 @@ public class BookingKYCInfoM  implements Serializable{
 //	private String email;
 	private String refId;
 	private String refType;
+	
+	@ManyToOne
+	@JoinColumn(name = "booking_id")
+	private BookingInfoM bookingInfo;
 	
 	//AggregateReference<BookingInfoM, Long> bookingId;
 	
@@ -96,6 +102,12 @@ public class BookingKYCInfoM  implements Serializable{
 	}
 	public void setUserKycId(Long userKycId) {
 		this.userKycId = userKycId;
+	}
+	public BookingInfoM getBookingInfo() {
+		return bookingInfo;
+	}
+	public void setBookingInfo(BookingInfoM bookingInfo) {
+		this.bookingInfo = bookingInfo;
 	}
 	
 	

@@ -6,6 +6,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -13,11 +14,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.MapKey;
 import javax.persistence.MapKeyColumn;
+import javax.persistence.NamedAttributeNode;
+import javax.persistence.NamedEntityGraph;
+import javax.persistence.OneToMany;
 
 
 
 
 @Entity(name="booking_info")
+@NamedEntityGraph(name = "BookingInfoM.kycInfo", attributeNodes = @NamedAttributeNode("kycInfo"))
 public class BookingInfoM implements Serializable{
 
 	
@@ -66,7 +71,7 @@ public class BookingInfoM implements Serializable{
     private HotelM hotelInfo;
 	
 
-    @ElementCollection  
+    @OneToMany(mappedBy = "bookingInfo", cascade = CascadeType.ALL, orphanRemoval = true)
     @MapKey(name="refId")
 	Map<String,BookingKYCInfoM> kycInfo = new HashMap<String,BookingKYCInfoM>();
 	

@@ -47,7 +47,7 @@ public class LoadTourTicketByDateFunc extends ComeInFunction{
 //		output.put("result", ComeInMapper.map((TicketView)v,new TourTicket()));
 //		return output;
 		Map<String,Object> results = new HashMap<String,Object>();
-		results.put("results", comeInMapper.map((TicketView)v,new TourTicket()));
+		results.put("result", comeInMapper.map((TicketView)v,new TourTicket()));
 		ComeInAPIResponse response = toComeInResults(results);
 		return response;
 	}

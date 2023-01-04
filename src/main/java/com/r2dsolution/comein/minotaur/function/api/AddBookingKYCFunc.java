@@ -71,7 +71,7 @@ public class AddBookingKYCFunc  extends ComeInFunction{
 					
 					//output.put("hotel-booking",result);
 					output.put("result",book);
-					output.put("bookno",bookno);
+					output.put("book-no",bookno);
 					
 				}
 			}

@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import org.springframework.data.jpa.repository.EntityGraph;
+import org.springframework.data.jpa.repository.EntityGraph.EntityGraphType;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -19,7 +21,10 @@ public interface BookingInfoRepository extends CrudRepository<BookingInfoM, Long
 
 	//public List<BookingInfoM> findByEmail(String email) throws Exception;
 	public List<BookingInfoM> findByOwnerId(String comeinId) throws Exception;
+	
+	@EntityGraph(value = "BookingInfoM.kycInfo", type = EntityGraphType.LOAD)
 	public Optional<BookingInfoM> findByBookingNoAndOwnerId(String bookNO, String ownerId)throws Exception;
+	
 	public Optional<BookingInfoM> findByOtaBookingId(Long otaBookingId)throws Exception;
 	public Optional<BookingInfoM> findByBookingNo(String bookno)throws Exception;
 	//public Optional<BookingInfoM> findByBookingNoAndHotelId(String bookno,Long hotelId)throws Exception;
