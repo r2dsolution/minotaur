@@ -13,6 +13,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.r2dsolution.comein.minotaur.function.IFunction;
+import com.r2dsolution.comein.minotaur.function.api.AddKYCInfoFunc;
 import com.r2dsolution.comein.minotaur.function.api.ListBookingByEmailFunc;
 import com.r2dsolution.comein.minotaur.function.api.LoadTourTicketByDateFunc;
 import com.r2dsolution.comein.minotaur.function.api.ViewKYCHotelBookingFunc;
@@ -20,7 +21,7 @@ import com.r2dsolution.comein.minotaur.function.model.ComeInAPIRequest;
 import com.r2dsolution.comein.minotaur.function.model.ComeInAPIResponse;
 
 @Configuration
-@ComponentScan({"com.r2dsolution.comein.minotaur.function","com.r2dsolution.comein.minotaur.business"})
+@ComponentScan({"com.r2dsolution.comein.minotaur.function","com.r2dsolution.comein.minotaur.business","com.r2dsolution.comein.minotaur.client"})
 @EnableJpaRepositories(basePackages = "com.r2dsolution.comein.minotaur.repository")
 public class MinotaurFunctionConfig {
 	
@@ -32,6 +33,9 @@ public class MinotaurFunctionConfig {
 	
 	@Autowired
 	ViewKYCHotelBookingFunc viewKYCHotelBookingFunc;
+	
+	@Autowired
+	AddKYCInfoFunc addKYCInfoFunc;
 	
 	@Bean
 	public Function<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> getHelloWorld(){
@@ -73,6 +77,12 @@ public class MinotaurFunctionConfig {
 	public Function<ComeInAPIRequest, ComeInAPIResponse> viewKYCHotelBooking() throws Exception{
 
 		return request ->  doExecute(viewKYCHotelBookingFunc,request );
+			
+	}
+	@Bean
+	public Function<ComeInAPIRequest, ComeInAPIResponse> addKYCInfo() throws Exception{
+
+		return request ->  doExecute(addKYCInfoFunc,request );
 			
 	}
 	

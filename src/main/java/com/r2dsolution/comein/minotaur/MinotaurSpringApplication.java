@@ -9,11 +9,12 @@ import org.springframework.context.annotation.Import;
 
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
+import com.r2dsolution.comein.minotaur.config.MinotaurAWSConfig;
 import com.r2dsolution.comein.minotaur.config.MinotaurFunctionConfig;
 
 
 @SpringBootApplication
-@Import(MinotaurFunctionConfig.class)
+@Import({MinotaurFunctionConfig.class,MinotaurAWSConfig.class})
 @EnableAutoConfiguration
 public class MinotaurSpringApplication {
 

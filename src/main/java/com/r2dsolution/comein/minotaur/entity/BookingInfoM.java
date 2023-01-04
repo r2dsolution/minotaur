@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.persistence.CascadeType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -17,6 +18,9 @@ import javax.persistence.MapKeyColumn;
 import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
+
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
 
 
 
@@ -31,6 +35,16 @@ public class BookingInfoM implements Serializable{
 	public static final String STATUS_CANCEL = "Cancel";
 	
 	@Id
+	@GeneratedValue(generator = "sequence-generator")
+    @GenericGenerator(
+      name = "sequence-generator",
+      strategy = "org.hibernate.id.enhanced.SequenceStyleGenerator",
+      parameters = {
+        @Parameter(name = "sequence_name", value = "booking_info_id_seq"),
+        @Parameter(name = "initial_value", value = "10"),
+        @Parameter(name = "increment_size", value = "1")
+        }
+    )
 	private Long id;
 	
 	private String bookingNo;
