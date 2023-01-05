@@ -60,9 +60,21 @@ Parameters:
          "comein-id":"$context.authorizer.claims['custom:comein_id']",
          "ref-name" : "$context.authorizer.claims.name",
          "sub":"$context.authorizer.claims.sub"   
-        },
-      "path-parameters": $allParams.get('path'),
-      "query-string-parameters": $allParams.get('querystring'),
+        }, 
+      #set($path_params = $allParams.get('path'))
+      "path-parameters" : {
+          #foreach($paramName in $path_params.keySet())
+          "$paramName" : "$util.escapeJavaScript($path_params.get($paramName))"
+              #if($foreach.hasNext),#end
+          #end
+      },
+      #set($query_params = $allParams.get('querystring'))
+      "query-string-parameters" : {
+          #foreach($paramName in $query_params.keySet())
+          "$paramName" : "$util.escapeJavaScript($query_params.get($paramName))"
+              #if($foreach.hasNext),#end
+          #end
+      },
       "stage-variables" : {
       #foreach($key in $stageVariables.keySet())
       "$key" : "$util.escapeJavaScript($stageVariables.get($key))"
