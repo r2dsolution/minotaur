@@ -517,7 +517,7 @@ Resources:
       ParentId: !GetAtt 
         - ComeInRestApi
         - RootResourceId
-      PathPart: hotel-bookings
+      PathPart: hotel-booking
 
   ListBookingByEmailMethod:
     Type: AWS::ApiGateway::Method
