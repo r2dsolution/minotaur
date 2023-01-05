@@ -15,6 +15,7 @@ import com.amazonaws.regions.Regions;
 import com.amazonaws.services.cognitoidp.AWSCognitoIdentityProviderClientBuilder;
 import com.amazonaws.services.secretsmanager.AWSSecretsManager;
 import com.amazonaws.services.secretsmanager.AWSSecretsManagerClientBuilder;
+import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
 import com.r2dsolution.comein.minotaur.util.SecretManagerUtils;
 
 
@@ -34,6 +35,20 @@ public class MinotaurAWSConfig {
 	
 	@Value( "${region}" )
 	public String region;
+	
+    @Bean
+    AmazonSQSClientBuilder intAmazonSQSClientBuilder(AWSSecretsManager secretManager) {
+    	Map<String,String> awsSecrets = SecretManagerUtils.getSecret(secretManager, mode+"/sqs/comein");
+    	String accessKey = awsSecrets.get("accessKey");
+		String secretKey = awsSecrets.get("secretKey");
+		
+		
+		
+		BasicAWSCredentials awsCreds = new BasicAWSCredentials(accessKey,secretKey);
+    	
+    	return  AmazonSQSClientBuilder.standard()
+		          .withCredentials(new AWSStaticCredentialsProvider(awsCreds)) ;
+    }
 	
 	@Bean
     AWSCognitoIdentityProviderClientBuilder initAWSCognitoIdentityProviderClientBuilder(AWSSecretsManager secretManager) {

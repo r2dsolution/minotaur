@@ -2,6 +2,7 @@ package com.r2dsolution.comein.minotaur.model;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -12,7 +13,12 @@ import org.springframework.stereotype.Component;
 import com.r2dsolution.comein.minotaur.entity.BookingInfoM;
 import com.r2dsolution.comein.minotaur.entity.HotelM;
 import com.r2dsolution.comein.minotaur.entity.UserKYCInfoM;
+import com.r2dsolution.comein.minotaur.entity.view.BookedTourTicketView;
 import com.r2dsolution.comein.minotaur.entity.view.TicketView;
+import com.r2dsolution.comein.minotaur.entity.view.TourTicketView;
+import com.r2dsolution.comein.minotaur.util.DateUtils;
+
+
 
 
 
@@ -122,10 +128,42 @@ public class ComeInMapper {
 		return kyc;
 	}
 	
-	public static HotelBooking map(HotelBooking book, Set<String> bookKycIds) {
+	public  HotelBooking map(HotelBooking book, Set<String> bookKycIds) {
 		
 		book.getCardId().addAll(bookKycIds);
 	
 		return book;
+	}
+	
+	public  List<TourTicket> map(List<TourTicketView> list){
+		 List<TourTicket>  results = new ArrayList<TourTicket>();
+		for(TourTicketView v: list) {
+			TourTicket t = map((TicketView)v, new TourTicket());
+			results.add(t);
+		}
+		return results;
+	}
+	
+	public  BookedTourTicket map(BookedTourTicketView bv) {
+		BookedTourTicket bt = new BookedTourTicket();
+		bt =  map((TicketView)bv,bt);
+		bt.setCode(bv.getCode());
+		bt.setOwnerId(bt.getOwnerId());
+		bt.setBookingDate(DateUtils.format(bv.getBookingDate(),DateUtils.DATE_FORMAT));
+		bt.setExpireDate(DateUtils.format(bv.getExpireDate(),DateUtils.DATETIME_FORMAT));
+		bt.setReferenceName(bv.getReferenceName());
+		bt.setBookingStatus(bv.getBookingStatus());
+		bt.setAdult(bv.getAdult());
+		bt.setChild(bv.getChild());
+		if (bv.getGatewayRef()!=null) {
+			bt.setGatewayRef(bv.getGatewayRef());
+			bt.setGateway(bv.getGateway());
+			bt.setPaymentAmt(bv.getPaymentAmt());
+			bt.setPaymentDate(DateUtils.format(bv.getPaymentDate(),DateUtils.DATETIME_FORMAT));
+			bt.setPaymentStatus(bv.getPaymentStatus());
+			bt.setPaymentNO(bv.getPaymentNO());
+			bt.setPaymentId(bv.getPaymentId());
+		};
+		return bt;
 	}
 }
