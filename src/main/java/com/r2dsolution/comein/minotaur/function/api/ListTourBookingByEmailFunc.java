@@ -19,7 +19,7 @@ import com.r2dsolution.comein.minotaur.util.DateUtils;
 
 
 @Component
-public class ListTourTicketByEmailFunc  extends ComeInFunction{
+public class ListTourBookingByEmailFunc  extends ComeInFunction{
 	
 	
 	@Autowired

@@ -161,7 +161,7 @@ public class ComeInMapper {
 			bt.setPaymentAmt(bv.getPaymentAmt());
 			bt.setPaymentDate(DateUtils.format(bv.getPaymentDate(),DateUtils.DATETIME_FORMAT));
 			bt.setPaymentStatus(bv.getPaymentStatus());
-			bt.setPaymentNO(bv.getPaymentNO());
+			bt.setPaymentNO(bv.getPaymentNo());
 			bt.setPaymentId(bv.getPaymentId());
 		};
 		return bt;

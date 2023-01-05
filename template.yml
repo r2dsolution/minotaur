@@ -176,6 +176,68 @@ Resources:
             Path: /
             Method: post
 
+# Start Function - ListTourTicketByDateFunc  
+  ListTourTicketByDateFunc:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub 'awscodestar-${ProjectId}-lambda-ListTourTicketByDateFunc'
+      Handler: org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest
+      Environment:
+        Variables:
+          spring_cloud_function_definition: listTourTicketByDate
+          DB_HOST: !Ref ComeInDBHost
+          DB_PORT: !Ref ComeInDBPort
+          DB_INSTANCE: !Ref ComeInDBInstance
+          DB_USERNAME: !Ref ComeInDBUsername
+          DB_PASSWORD: !Ref ComeInDBPassword          
+      Runtime: java11
+      Timeout: 60
+      MemorySize: 1024
+      Role:
+        Fn::GetAtt:
+        - LambdaExecutionRole
+        - Arn
+
+  ListTourTicketByDatePermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref ListTourTicketByDateFunc
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ComeInRestApi}/*/POST/tour-ticket
+
+  ListTourTicketByDateResource:
+    Type: 'AWS::ApiGateway::Resource'
+    Properties:
+      RestApiId: !Ref ComeInRestApi
+      ParentId: !GetAtt 
+        - ComeInRestApi
+        - RootResourceId
+      PathPart: tour-ticket
+
+  ListTourTicketByDateMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref ComeInRestApi
+      ResourceId: !Ref ListTourTicketByDateResource
+      HttpMethod: POST
+      AuthorizationType: COGNITO_USER_POOLS
+      AuthorizerId: !Ref ComeInAuthorizer
+      Integration:
+        Type: AWS
+        IntegrationHttpMethod: POST
+        Uri:  !Join ['', ['arn:aws:apigateway:', !Ref AWS::Region, ':lambda:path/2015-03-31/functions/', !GetAtt ListTourTicketByDateFunc.Arn, '/invocations']]
+        PassthroughBehavior: WHEN_NO_TEMPLATES
+        RequestTemplates: 
+          'application/json': !Ref ComeInRequestTemplate
+        IntegrationResponses:
+          - StatusCode: 200
+            ResponseTemplates:
+              'application/json' : !Ref ComeInResponseTemplate
+      MethodResponses:
+        - StatusCode: 200     
+# End Function - ListTourTicketByDateFunc  
+
 # Start Function - LoadTourTicketByDateFunc  
   LoadTourTicketByDateFunc:
     Type: AWS::Serverless::Function
@@ -204,16 +266,14 @@ Resources:
       FunctionName: !Ref LoadTourTicketByDateFunc
       Action: lambda:InvokeFunction
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ComeInRestApi}/*/POST/tour-tickets
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ComeInRestApi}/*/POST/tour-ticket/tour
 
   LoadTourTicketByDateResource:
     Type: 'AWS::ApiGateway::Resource'
     Properties:
       RestApiId: !Ref ComeInRestApi
-      ParentId: !GetAtt 
-        - ComeInRestApi
-        - RootResourceId
-      PathPart: tour-tickets
+      ParentId: !Ref ListTourTicketByDateResource
+      PathPart: tour
 
   LoadTourTicketByDateMethod:
     Type: AWS::ApiGateway::Method
@@ -237,6 +297,188 @@ Resources:
       MethodResponses:
         - StatusCode: 200     
 # End Function - LoadTourTicketByDateFunc  
+
+# Start Function - ReserveTourBookingFunc  
+  ReserveTourBookingFunc:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub 'awscodestar-${ProjectId}-lambda-ReserveTourBookingFunc'
+      Handler: org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest
+      Environment:
+        Variables:
+          spring_cloud_function_definition: reserveTourBooking
+          DB_HOST: !Ref ComeInDBHost
+          DB_PORT: !Ref ComeInDBPort
+          DB_INSTANCE: !Ref ComeInDBInstance
+          DB_USERNAME: !Ref ComeInDBUsername
+          DB_PASSWORD: !Ref ComeInDBPassword          
+      Runtime: java11
+      Timeout: 60
+      MemorySize: 1024
+      Role:
+        Fn::GetAtt:
+        - LambdaExecutionRole
+        - Arn
+
+  ReserveTourBookingPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref ReserveTourBookingFunc
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ComeInRestApi}/*/POST/tour-ticket/reserve
+
+  ReserveTourBookingResource:
+    Type: 'AWS::ApiGateway::Resource'
+    Properties:
+      RestApiId: !Ref ComeInRestApi
+      ParentId: !Ref ListTourTicketByDateResource
+      PathPart: reserve
+
+  ReserveTourBookingMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref ComeInRestApi
+      ResourceId: !Ref ReserveTourBookingResource
+      HttpMethod: POST
+      AuthorizationType: COGNITO_USER_POOLS
+      AuthorizerId: !Ref ComeInAuthorizer
+      Integration:
+        Type: AWS
+        IntegrationHttpMethod: POST
+        Uri:  !Join ['', ['arn:aws:apigateway:', !Ref AWS::Region, ':lambda:path/2015-03-31/functions/', !GetAtt ReserveTourBookingFunc.Arn, '/invocations']]
+        PassthroughBehavior: WHEN_NO_TEMPLATES
+        RequestTemplates: 
+          'application/json': !Ref ComeInRequestTemplate
+        IntegrationResponses:
+          - StatusCode: 200
+            ResponseTemplates:
+              'application/json' : !Ref ComeInResponseTemplate
+      MethodResponses:
+        - StatusCode: 200     
+# End Function - ReserveTourBookingFunc  
+
+# Start Function - ListTourBookingByEmailFunc  
+  ListTourBookingByEmailFunc:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub 'awscodestar-${ProjectId}-lambda-ListTourBookingByEmailFunc'
+      Handler: org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest
+      Environment:
+        Variables:
+          spring_cloud_function_definition: listTourBookingByEmail
+          DB_HOST: !Ref ComeInDBHost
+          DB_PORT: !Ref ComeInDBPort
+          DB_INSTANCE: !Ref ComeInDBInstance
+          DB_USERNAME: !Ref ComeInDBUsername
+          DB_PASSWORD: !Ref ComeInDBPassword          
+      Runtime: java11
+      Timeout: 60
+      MemorySize: 1024
+      Role:
+        Fn::GetAtt:
+        - LambdaExecutionRole
+        - Arn
+
+  ListTourBookingByEmailPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref ListTourBookingByEmailFunc
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ComeInRestApi}/*/POST/booking-tour-ticket
+
+  ListTourBookingByEmailResource:
+    Type: 'AWS::ApiGateway::Resource'
+    Properties:
+      RestApiId: !Ref ComeInRestApi
+      ParentId: !GetAtt 
+        - ComeInRestApi
+        - RootResourceId
+      PathPart: booking-tour-ticket
+
+  ListTourBookingByEmailMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref ComeInRestApi
+      ResourceId: !Ref ListTourBookingByEmailResource
+      HttpMethod: POST
+      AuthorizationType: COGNITO_USER_POOLS
+      AuthorizerId: !Ref ComeInAuthorizer
+      Integration:
+        Type: AWS
+        IntegrationHttpMethod: POST
+        Uri:  !Join ['', ['arn:aws:apigateway:', !Ref AWS::Region, ':lambda:path/2015-03-31/functions/', !GetAtt ListTourBookingByEmailFunc.Arn, '/invocations']]
+        PassthroughBehavior: WHEN_NO_TEMPLATES
+        RequestTemplates: 
+          'application/json': !Ref ComeInRequestTemplate
+        IntegrationResponses:
+          - StatusCode: 200
+            ResponseTemplates:
+              'application/json' : !Ref ComeInResponseTemplate
+      MethodResponses:
+        - StatusCode: 200     
+# End Function - ListTourBookingByEmailFunc  
+
+# Start Function - LoadBookedTourTicketFunc  
+  LoadBookedTourTicketFunc:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub 'awscodestar-${ProjectId}-lambda-LoadBookedTourTicketFunc'
+      Handler: org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest
+      Environment:
+        Variables:
+          spring_cloud_function_definition: loadBookedTourTicket
+          DB_HOST: !Ref ComeInDBHost
+          DB_PORT: !Ref ComeInDBPort
+          DB_INSTANCE: !Ref ComeInDBInstance
+          DB_USERNAME: !Ref ComeInDBUsername
+          DB_PASSWORD: !Ref ComeInDBPassword          
+      Runtime: java11
+      Timeout: 60
+      MemorySize: 1024
+      Role:
+        Fn::GetAtt:
+        - LambdaExecutionRole
+        - Arn
+
+  LoadBookedTourTicketPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref LoadBookedTourTicketFunc
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ComeInRestApi}/*/POST/booking-tour-ticket/code
+
+  LoadBookedTourTicketResource:
+    Type: 'AWS::ApiGateway::Resource'
+    Properties:
+      RestApiId: !Ref ComeInRestApi
+      ParentId: !Ref ListTourBookingByEmailResource
+      PathPart: code
+
+  LoadBookedTourTicketMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref ComeInRestApi
+      ResourceId: !Ref LoadBookedTourTicketResource
+      HttpMethod: POST
+      AuthorizationType: COGNITO_USER_POOLS
+      AuthorizerId: !Ref ComeInAuthorizer
+      Integration:
+        Type: AWS
+        IntegrationHttpMethod: POST
+        Uri:  !Join ['', ['arn:aws:apigateway:', !Ref AWS::Region, ':lambda:path/2015-03-31/functions/', !GetAtt LoadBookedTourTicketFunc.Arn, '/invocations']]
+        PassthroughBehavior: WHEN_NO_TEMPLATES
+        RequestTemplates: 
+          'application/json': !Ref ComeInRequestTemplate
+        IntegrationResponses:
+          - StatusCode: 200
+            ResponseTemplates:
+              'application/json' : !Ref ComeInResponseTemplate
+      MethodResponses:
+        - StatusCode: 200     
+# End Function - LoadBookedTourTicketFunc 
 
 # Start Function - ListBookingByEmailFunc  
   ListBookingByEmailFunc:
@@ -300,6 +542,66 @@ Resources:
         - StatusCode: 200     
 # End Function - ListBookingByEmailFunc  
 
+# Start Function - ListBookingByRefFunc  
+  ListBookingByRefFunc:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub 'awscodestar-${ProjectId}-lambda-ListBookingByRefFunc'
+      Handler: org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest
+      Environment:
+        Variables:
+          spring_cloud_function_definition: listBookingByRef
+          DB_HOST: !Ref ComeInDBHost
+          DB_PORT: !Ref ComeInDBPort
+          DB_INSTANCE: !Ref ComeInDBInstance
+          DB_USERNAME: !Ref ComeInDBUsername
+          DB_PASSWORD: !Ref ComeInDBPassword          
+      Runtime: java11
+      Timeout: 60
+      MemorySize: 1024
+      Role:
+        Fn::GetAtt:
+        - LambdaExecutionRole
+        - Arn
+
+  ListBookingByRefPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref ListBookingByRefFunc
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ComeInRestApi}/*/POST/hotel-booking/ref
+
+  ListBookingByRefResource:
+    Type: 'AWS::ApiGateway::Resource'
+    Properties:
+      RestApiId: !Ref ComeInRestApi
+      ParentId: !Ref ListBookingByEmailResource
+      PathPart: ref
+
+  ListBookingByRefMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref ComeInRestApi
+      ResourceId: !Ref ListBookingByRefResource
+      HttpMethod: POST
+      AuthorizationType: COGNITO_USER_POOLS
+      AuthorizerId: !Ref ComeInAuthorizer
+      Integration:
+        Type: AWS
+        IntegrationHttpMethod: POST
+        Uri:  !Join ['', ['arn:aws:apigateway:', !Ref AWS::Region, ':lambda:path/2015-03-31/functions/', !GetAtt ListBookingByRefFunc.Arn, '/invocations']]
+        PassthroughBehavior: WHEN_NO_TEMPLATES
+        RequestTemplates: 
+          'application/json': !Ref ComeInRequestTemplate
+        IntegrationResponses:
+          - StatusCode: 200
+            ResponseTemplates:
+              'application/json' : !Ref ComeInResponseTemplate
+      MethodResponses:
+        - StatusCode: 200     
+# End Function - ListBookingByRefFunc  
+
 # Start Function - InitBookingByIdFunc  
   InitBookingByIdFunc:
     Type: AWS::Serverless::Function
@@ -359,6 +661,66 @@ Resources:
       MethodResponses:
         - StatusCode: 200     
 # End Function - InitBookingByIdFunc 
+
+# Start Function - ViewHotelBookingByBookNOFunc  
+  ViewHotelBookingByBookNOFunc:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub 'awscodestar-${ProjectId}-lambda-ViewHotelBookingByBookNOFunc'
+      Handler: org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest
+      Environment:
+        Variables:
+          spring_cloud_function_definition: viewHotelBookingByBookNO
+          DB_HOST: !Ref ComeInDBHost
+          DB_PORT: !Ref ComeInDBPort
+          DB_INSTANCE: !Ref ComeInDBInstance
+          DB_USERNAME: !Ref ComeInDBUsername
+          DB_PASSWORD: !Ref ComeInDBPassword          
+      Runtime: java11
+      Timeout: 60
+      MemorySize: 1024
+      Role:
+        Fn::GetAtt:
+        - LambdaExecutionRole
+        - Arn
+
+  ViewHotelBookingByBookNOPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref ViewHotelBookingByBookNOFunc
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ComeInRestApi}/*/POST/hotel-booking/book-no
+
+  ViewHotelBookingByBookNOResource:
+    Type: 'AWS::ApiGateway::Resource'
+    Properties:
+      RestApiId: !Ref ComeInRestApi
+      ParentId: !Ref ListBookingByEmailResource
+      PathPart: book-no
+
+  ViewHotelBookingByBookNOMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref ComeInRestApi
+      ResourceId: !Ref ViewHotelBookingByBookNOResource
+      HttpMethod: POST
+      AuthorizationType: COGNITO_USER_POOLS
+      AuthorizerId: !Ref ComeInAuthorizer
+      Integration:
+        Type: AWS
+        IntegrationHttpMethod: POST
+        Uri:  !Join ['', ['arn:aws:apigateway:', !Ref AWS::Region, ':lambda:path/2015-03-31/functions/', !GetAtt ViewHotelBookingByBookNOFunc.Arn, '/invocations']]
+        PassthroughBehavior: WHEN_NO_TEMPLATES
+        RequestTemplates: 
+          'application/json': !Ref ComeInRequestTemplate
+        IntegrationResponses:
+          - StatusCode: 200
+            ResponseTemplates:
+              'application/json' : !Ref ComeInResponseTemplate
+      MethodResponses:
+        - StatusCode: 200     
+# End Function - ViewHotelBookingByBookNOFunc 
 
 # Start Function - ForwardHotelBookingFunc  
   ForwardHotelBookingFunc:

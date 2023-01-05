@@ -19,7 +19,13 @@ import com.r2dsolution.comein.minotaur.function.api.CancelForwardHotelBookingFun
 import com.r2dsolution.comein.minotaur.function.api.ForwardHotelBookingFunc;
 import com.r2dsolution.comein.minotaur.function.api.InitBookingByIdFunc;
 import com.r2dsolution.comein.minotaur.function.api.ListBookingByEmailFunc;
+import com.r2dsolution.comein.minotaur.function.api.ListBookingByRefFunc;
+import com.r2dsolution.comein.minotaur.function.api.ListTourBookingByEmailFunc;
+import com.r2dsolution.comein.minotaur.function.api.ListTourTicketByDateFunc;
+import com.r2dsolution.comein.minotaur.function.api.LoadBookedTourTicketFunc;
 import com.r2dsolution.comein.minotaur.function.api.LoadTourTicketByDateFunc;
+import com.r2dsolution.comein.minotaur.function.api.ReserveTourBookingFunc;
+import com.r2dsolution.comein.minotaur.function.api.ViewHotelBookingByBookNOFunc;
 import com.r2dsolution.comein.minotaur.function.api.ViewKYCHotelBookingFunc;
 import com.r2dsolution.comein.minotaur.function.model.ComeInAPIRequest;
 import com.r2dsolution.comein.minotaur.function.model.ComeInAPIResponse;
@@ -34,6 +40,9 @@ public class MinotaurFunctionConfig {
 	
 	@Autowired
 	ListBookingByEmailFunc listBookingByEmailFunc;
+	
+	@Autowired
+	ListBookingByRefFunc listBookingByRefFunc;
 	
 	@Autowired
 	ViewKYCHotelBookingFunc viewKYCHotelBookingFunc;
@@ -52,6 +61,21 @@ public class MinotaurFunctionConfig {
 	
 	@Autowired
 	InitBookingByIdFunc initBookingByIdFunc;
+	
+	@Autowired
+	ListTourTicketByDateFunc listTourTicketByDateFunc;
+	
+	@Autowired
+	ListTourBookingByEmailFunc listTourBookingByEmailFunc;
+	
+	@Autowired
+	LoadBookedTourTicketFunc loadBookedTourTicketFunc;
+	
+	@Autowired
+	ReserveTourBookingFunc reserveTourBookingFunc;
+	
+	@Autowired
+	ViewHotelBookingByBookNOFunc viewHotelBookingByBookNOFunc;
 	
 	@Bean
 	public Function<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> getHelloWorld(){
@@ -86,6 +110,13 @@ public class MinotaurFunctionConfig {
 	public Function<ComeInAPIRequest, ComeInAPIResponse> listBookingByEmail() throws Exception{
 		System.out.println("init....................listBookingByEmail");
 		return request ->  doExecute(listBookingByEmailFunc,request );
+			
+	}
+	
+	@Bean
+	public Function<ComeInAPIRequest, ComeInAPIResponse> listBookingByRef() throws Exception{
+		System.out.println("init....................listBookingByRef");
+		return request ->  doExecute(listBookingByRefFunc,request );
 			
 	}
 	
@@ -129,6 +160,40 @@ public class MinotaurFunctionConfig {
 			
 	}
 	
+	@Bean
+	public Function<ComeInAPIRequest, ComeInAPIResponse> listTourTicketByDate() throws Exception{
+		System.out.println("init....................listTourTicketByDate");
+		return request ->  doExecute(listTourTicketByDateFunc,request );
+			
+	}
+	
+	@Bean
+	public Function<ComeInAPIRequest, ComeInAPIResponse> listTourBookingByEmail() throws Exception{
+		System.out.println("init....................listTourBookingByEmail");
+		return request ->  doExecute(listTourBookingByEmailFunc,request );
+			
+	}
+	
+	@Bean
+	public Function<ComeInAPIRequest, ComeInAPIResponse> loadBookedTourTicket() throws Exception{
+		System.out.println("init....................loadBookedTourTicket");
+		return request ->  doExecute(loadBookedTourTicketFunc,request );
+			
+	}
+	
+	@Bean
+	public Function<ComeInAPIRequest, ComeInAPIResponse> reserveTourBooking() throws Exception{
+		System.out.println("init....................reserveTourBooking");
+		return request ->  doExecute(reserveTourBookingFunc,request );
+			
+	}
+	
+	@Bean
+	public Function<ComeInAPIRequest, ComeInAPIResponse> viewHotelBookingByBookNO() throws Exception{
+		System.out.println("init....................viewHotelBookingByBookNO");
+		return request ->  doExecute(viewHotelBookingByBookNOFunc,request );
+			
+	}
 
 	protected ComeInAPIResponse doExecute(IFunction func,ComeInAPIRequest request){
 		try {

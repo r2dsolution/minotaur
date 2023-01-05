@@ -81,7 +81,7 @@ public class BookedTourTicketView implements Serializable,TicketView{
 	
 	private String gateway;
 	private Long paymentId;
-	private String paymentNO;
+	private String paymentNo;
 	private Date paymentDate;
 	private String paymentStatus;
 	private BigDecimal paymentAmt;
@@ -286,12 +286,7 @@ public class BookedTourTicketView implements Serializable,TicketView{
 	public void setGateway(String gateway) {
 		this.gateway = gateway;
 	}
-	public String getPaymentNO() {
-		return paymentNO;
-	}
-	public void setPaymentNO(String paymentNO) {
-		this.paymentNO = paymentNO;
-	}
+	
 	public Date getPaymentDate() {
 		return paymentDate;
 	}
@@ -315,6 +310,12 @@ public class BookedTourTicketView implements Serializable,TicketView{
 	}
 	public void setPaymentId(Long paymentId) {
 		this.paymentId = paymentId;
+	}
+	public String getPaymentNo() {
+		return paymentNo;
+	}
+	public void setPaymentNo(String paymentNo) {
+		this.paymentNo = paymentNo;
 	}
 	
 	

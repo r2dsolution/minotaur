@@ -60,7 +60,7 @@ public class ReserveTourBookingFunc  extends ComeInFunction{
 			 
 			 client.sendFIFO(sqsClient, url, req,"ReserveTourBooking");
 			
-			
+			output.put("book-code", bookingCode);
 			
 			return toComeInResults(output);
 		 } catch (Exception e) {
