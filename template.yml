@@ -266,7 +266,7 @@ Resources:
       FunctionName: !Ref ListBookingByEmailFunc
       Action: lambda:InvokeFunction
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ComeInRestApi}/*/POST/hotel-bookings
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ComeInRestApi}/*/POST/hotel-booking
 
   ListBookingByEmailResource:
     Type: 'AWS::ApiGateway::Resource'
@@ -300,6 +300,186 @@ Resources:
         - StatusCode: 200     
 # End Function - ListBookingByEmailFunc  
 
+# Start Function - InitBookingByIdFunc  
+  InitBookingByIdFunc:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub 'awscodestar-${ProjectId}-lambda-InitBookingByIdFunc'
+      Handler: org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest
+      Environment:
+        Variables:
+          spring_cloud_function_definition: initBookingById
+          DB_HOST: !Ref ComeInDBHost
+          DB_PORT: !Ref ComeInDBPort
+          DB_INSTANCE: !Ref ComeInDBInstance
+          DB_USERNAME: !Ref ComeInDBUsername
+          DB_PASSWORD: !Ref ComeInDBPassword          
+      Runtime: java11
+      Timeout: 60
+      MemorySize: 1024
+      Role:
+        Fn::GetAtt:
+        - LambdaExecutionRole
+        - Arn
+
+  InitBookingByIdPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref InitBookingByIdFunc
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ComeInRestApi}/*/POST/hotel-booking/init-booking
+
+  InitBookingByIdResource:
+    Type: 'AWS::ApiGateway::Resource'
+    Properties:
+      RestApiId: !Ref ComeInRestApi
+      ParentId: !Ref ListBookingByEmailResource
+      PathPart: init-booking
+
+  InitBookingByIdMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref ComeInRestApi
+      ResourceId: !Ref InitBookingByIdResource
+      HttpMethod: POST
+      AuthorizationType: COGNITO_USER_POOLS
+      AuthorizerId: !Ref ComeInAuthorizer
+      Integration:
+        Type: AWS
+        IntegrationHttpMethod: POST
+        Uri:  !Join ['', ['arn:aws:apigateway:', !Ref AWS::Region, ':lambda:path/2015-03-31/functions/', !GetAtt InitBookingByIdFunc.Arn, '/invocations']]
+        PassthroughBehavior: WHEN_NO_TEMPLATES
+        RequestTemplates: 
+          'application/json': !Ref ComeInRequestTemplate
+        IntegrationResponses:
+          - StatusCode: 200
+            ResponseTemplates:
+              'application/json' : !Ref ComeInResponseTemplate
+      MethodResponses:
+        - StatusCode: 200     
+# End Function - InitBookingByIdFunc 
+
+# Start Function - ForwardHotelBookingFunc  
+  ForwardHotelBookingFunc:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub 'awscodestar-${ProjectId}-lambda-ForwardHotelBookingFunc'
+      Handler: org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest
+      Environment:
+        Variables:
+          spring_cloud_function_definition: forwardHotelBooking
+          DB_HOST: !Ref ComeInDBHost
+          DB_PORT: !Ref ComeInDBPort
+          DB_INSTANCE: !Ref ComeInDBInstance
+          DB_USERNAME: !Ref ComeInDBUsername
+          DB_PASSWORD: !Ref ComeInDBPassword          
+      Runtime: java11
+      Timeout: 60
+      MemorySize: 1024
+      Role:
+        Fn::GetAtt:
+        - LambdaExecutionRole
+        - Arn
+
+  ForwardHotelBookingPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref ForwardHotelBookingFunc
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ComeInRestApi}/*/POST/hotel-booking/forward
+
+  ForwardHotelBookingResource:
+    Type: 'AWS::ApiGateway::Resource'
+    Properties:
+      RestApiId: !Ref ComeInRestApi
+      ParentId: !Ref ListBookingByEmailResource
+      PathPart: forward
+
+  ForwardHotelBookingMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref ComeInRestApi
+      ResourceId: !Ref ForwardHotelBookingResource
+      HttpMethod: POST
+      AuthorizationType: COGNITO_USER_POOLS
+      AuthorizerId: !Ref ComeInAuthorizer
+      Integration:
+        Type: AWS
+        IntegrationHttpMethod: POST
+        Uri:  !Join ['', ['arn:aws:apigateway:', !Ref AWS::Region, ':lambda:path/2015-03-31/functions/', !GetAtt ForwardHotelBookingFunc.Arn, '/invocations']]
+        PassthroughBehavior: WHEN_NO_TEMPLATES
+        RequestTemplates: 
+          'application/json': !Ref ComeInRequestTemplate
+        IntegrationResponses:
+          - StatusCode: 200
+            ResponseTemplates:
+              'application/json' : !Ref ComeInResponseTemplate
+      MethodResponses:
+        - StatusCode: 200     
+# End Function - ForwardHotelBookingFunc 
+
+# Start Function - CancelForwardHotelBookingFunc  
+  CancelForwardHotelBookingFunc:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub 'awscodestar-${ProjectId}-lambda-CancelForwardHotelBookingFunc'
+      Handler: org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest
+      Environment:
+        Variables:
+          spring_cloud_function_definition: cancelForwardHotelBooking
+          DB_HOST: !Ref ComeInDBHost
+          DB_PORT: !Ref ComeInDBPort
+          DB_INSTANCE: !Ref ComeInDBInstance
+          DB_USERNAME: !Ref ComeInDBUsername
+          DB_PASSWORD: !Ref ComeInDBPassword          
+      Runtime: java11
+      Timeout: 60
+      MemorySize: 1024
+      Role:
+        Fn::GetAtt:
+        - LambdaExecutionRole
+        - Arn
+
+  CancelForwardHotelBookingPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref CancelForwardHotelBookingFunc
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ComeInRestApi}/*/POST/hotel-booking/cancel-forward
+
+  CancelForwardHotelBookingResource:
+    Type: 'AWS::ApiGateway::Resource'
+    Properties:
+      RestApiId: !Ref ComeInRestApi
+      ParentId: !Ref ListBookingByEmailResource
+      PathPart: cancel-forward
+
+  CancelForwardHotelBookingMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref ComeInRestApi
+      ResourceId: !Ref CancelForwardHotelBookingResource
+      HttpMethod: POST
+      AuthorizationType: COGNITO_USER_POOLS
+      AuthorizerId: !Ref ComeInAuthorizer
+      Integration:
+        Type: AWS
+        IntegrationHttpMethod: POST
+        Uri:  !Join ['', ['arn:aws:apigateway:', !Ref AWS::Region, ':lambda:path/2015-03-31/functions/', !GetAtt CancelForwardHotelBookingFunc.Arn, '/invocations']]
+        PassthroughBehavior: WHEN_NO_TEMPLATES
+        RequestTemplates: 
+          'application/json': !Ref ComeInRequestTemplate
+        IntegrationResponses:
+          - StatusCode: 200
+            ResponseTemplates:
+              'application/json' : !Ref ComeInResponseTemplate
+      MethodResponses:
+        - StatusCode: 200     
+# End Function - CancelForwardHotelBookingFunc  
+
 # Start Function - ViewKYCHotelBookingFunc  
   ViewKYCHotelBookingFunc:
     Type: AWS::Serverless::Function
@@ -328,7 +508,7 @@ Resources:
       FunctionName: !Ref ViewKYCHotelBookingFunc
       Action: lambda:InvokeFunction
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ComeInRestApi}/*/POST/kyc-hotel-bookings
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ComeInRestApi}/*/POST/kyc-hotel-booking
 
   ViewKYCHotelBookingResource:
     Type: 'AWS::ApiGateway::Resource'
@@ -362,6 +542,66 @@ Resources:
         - StatusCode: 200     
 # End Function - ViewKYCHotelBookingFunc  
 
+# Start Function - AddBookingKYCFunc  
+  AddBookingKYCFunc:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub 'awscodestar-${ProjectId}-lambda-AddBookingKYCFunc'
+      Handler: org.springframework.cloud.function.adapter.aws.FunctionInvoker::handleRequest
+      Environment:
+        Variables:
+          spring_cloud_function_definition: addBookingKYC
+          DB_HOST: !Ref ComeInDBHost
+          DB_PORT: !Ref ComeInDBPort
+          DB_INSTANCE: !Ref ComeInDBInstance
+          DB_USERNAME: !Ref ComeInDBUsername
+          DB_PASSWORD: !Ref ComeInDBPassword          
+      Runtime: java11
+      Timeout: 60
+      MemorySize: 1024
+      Role:
+        Fn::GetAtt:
+        - LambdaExecutionRole
+        - Arn
+
+  AddBookingKYCPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref AddBookingKYCFunc
+      Action: lambda:InvokeFunction
+      Principal: apigateway.amazonaws.com
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ComeInRestApi}/*/POST/kyc-hotel-booking/add-kyc-info
+
+  AddBookingKYCResource:
+    Type: 'AWS::ApiGateway::Resource'
+    Properties:
+      RestApiId: !Ref ComeInRestApi
+      ParentId: !Ref ViewKYCHotelBookingResource
+      PathPart: add-kyc-info
+
+  AddBookingKYCMethod:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      RestApiId: !Ref ComeInRestApi
+      ResourceId: !Ref AddBookingKYCResource
+      HttpMethod: POST
+      AuthorizationType: COGNITO_USER_POOLS
+      AuthorizerId: !Ref ComeInAuthorizer
+      Integration:
+        Type: AWS
+        IntegrationHttpMethod: POST
+        Uri:  !Join ['', ['arn:aws:apigateway:', !Ref AWS::Region, ':lambda:path/2015-03-31/functions/', !GetAtt AddBookingKYCFunc.Arn, '/invocations']]
+        PassthroughBehavior: WHEN_NO_TEMPLATES
+        RequestTemplates: 
+          'application/json': !Ref ComeInRequestTemplate
+        IntegrationResponses:
+          - StatusCode: 200
+            ResponseTemplates:
+              'application/json' : !Ref ComeInResponseTemplate
+      MethodResponses:
+        - StatusCode: 200     
+# End Function - AddBookingKYCFunc  
+
 # Start Function - AddKYCInfoFunc  
   AddKYCInfoFunc:
     Type: AWS::Serverless::Function
@@ -390,16 +630,23 @@ Resources:
       FunctionName: !Ref AddKYCInfoFunc
       Action: lambda:InvokeFunction
       Principal: apigateway.amazonaws.com
-      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ComeInRestApi}/*/POST/add-kyc-info
-
-  AddKYCInfoResource:
+      SourceArn: !Sub arn:aws:execute-api:${AWS::Region}:${AWS::AccountId}:${ComeInRestApi}/*/POST/kyc-info/add
+      
+  ListKYCInfoResource:
     Type: 'AWS::ApiGateway::Resource'
     Properties:
       RestApiId: !Ref ComeInRestApi
       ParentId: !GetAtt 
         - ComeInRestApi
         - RootResourceId
-      PathPart: add-kyc-info
+      PathPart: kyc-info
+      
+  AddKYCInfoResource:
+    Type: 'AWS::ApiGateway::Resource'
+    Properties:
+      RestApiId: !Ref ComeInRestApi
+      ParentId: !Ref ListKYCInfoResource
+      PathPart: add
 
   AddKYCInfoMethod:
     Type: AWS::ApiGateway::Method

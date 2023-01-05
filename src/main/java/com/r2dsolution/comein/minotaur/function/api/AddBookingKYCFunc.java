@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import com.r2dsolution.comein.minotaur.business.ViewKYCBookingDelegate;
 import com.r2dsolution.comein.minotaur.entity.BookingInfoM;
@@ -18,7 +19,7 @@ import com.r2dsolution.comein.minotaur.repository.BookingInfoRepository;
 import com.r2dsolution.comein.minotaur.repository.UserKYCRepository;
 
 
-
+@Component
 public class AddBookingKYCFunc  extends ComeInFunction{
 	
 	@Autowired
@@ -47,6 +48,7 @@ public class AddBookingKYCFunc  extends ComeInFunction{
 			
 			if (bookInfoOpt.isPresent()) {
 				BookingInfoM bookInfo = bookInfoOpt.get();
+				log("book-no: "+bookInfo.getBookingNo());
 				
 				//UserKYCRepository kycRepo = ctx.getBean(UserKYCRepository.class);
 				

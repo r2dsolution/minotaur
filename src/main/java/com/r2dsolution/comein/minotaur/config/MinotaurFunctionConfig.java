@@ -13,7 +13,11 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.r2dsolution.comein.minotaur.function.IFunction;
+import com.r2dsolution.comein.minotaur.function.api.AddBookingKYCFunc;
 import com.r2dsolution.comein.minotaur.function.api.AddKYCInfoFunc;
+import com.r2dsolution.comein.minotaur.function.api.CancelForwardHotelBookingFunc;
+import com.r2dsolution.comein.minotaur.function.api.ForwardHotelBookingFunc;
+import com.r2dsolution.comein.minotaur.function.api.InitBookingByIdFunc;
 import com.r2dsolution.comein.minotaur.function.api.ListBookingByEmailFunc;
 import com.r2dsolution.comein.minotaur.function.api.LoadTourTicketByDateFunc;
 import com.r2dsolution.comein.minotaur.function.api.ViewKYCHotelBookingFunc;
@@ -37,9 +41,21 @@ public class MinotaurFunctionConfig {
 	@Autowired
 	AddKYCInfoFunc addKYCInfoFunc;
 	
+	@Autowired
+	AddBookingKYCFunc addBookingKYCFunc;
+	
+	@Autowired
+	ForwardHotelBookingFunc forwardHotelBookingFunc;
+	
+	@Autowired
+	CancelForwardHotelBookingFunc cancelForwardHotelBookingFunc;
+	
+	@Autowired
+	InitBookingByIdFunc initBookingByIdFunc;
+	
 	@Bean
 	public Function<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> getHelloWorld(){
-		System.out.println("........Hello............");
+		System.out.println("init....................getHelloWorld");
 		return request -> {
 			APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
 			response.setBody("Get event: Hello World by spring-cloud-function.");
@@ -50,7 +66,7 @@ public class MinotaurFunctionConfig {
 	
 	@Bean
 	public Function<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> postHelloWorld(){
-		System.out.println("........Hello............");
+		System.out.println("init....................postHelloWorld");
 		return request -> {
 			
 			APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
@@ -61,28 +77,55 @@ public class MinotaurFunctionConfig {
 	
 	@Bean
 	public Function<ComeInAPIRequest, ComeInAPIResponse> loadTourTicketByDate() throws Exception{
-
+		System.out.println("init....................loadTourTicketByDate");
 		return request ->  doExecute(loadTourTicketByDateFunc,request );
 			
 	}
 	
 	@Bean
 	public Function<ComeInAPIRequest, ComeInAPIResponse> listBookingByEmail() throws Exception{
-
+		System.out.println("init....................listBookingByEmail");
 		return request ->  doExecute(listBookingByEmailFunc,request );
 			
 	}
 	
 	@Bean
 	public Function<ComeInAPIRequest, ComeInAPIResponse> viewKYCHotelBooking() throws Exception{
-
+		System.out.println("init....................viewKYCHotelBooking");
 		return request ->  doExecute(viewKYCHotelBookingFunc,request );
 			
 	}
 	@Bean
 	public Function<ComeInAPIRequest, ComeInAPIResponse> addKYCInfo() throws Exception{
-
+		System.out.println("init....................addKYCInfo");
 		return request ->  doExecute(addKYCInfoFunc,request );
+			
+	}
+	@Bean
+	public Function<ComeInAPIRequest, ComeInAPIResponse> addBookingKYC() throws Exception{
+		System.out.println("init....................addBookingKYC");
+		return request ->  doExecute(addBookingKYCFunc,request );
+			
+	}
+	
+	@Bean
+	public Function<ComeInAPIRequest, ComeInAPIResponse> forwardHotelBooking() throws Exception{
+		System.out.println("init....................forwardHotelBooking");
+		return request ->  doExecute(forwardHotelBookingFunc,request );
+			
+	}
+	
+	@Bean
+	public Function<ComeInAPIRequest, ComeInAPIResponse> cancelForwardHotelBooking() throws Exception{
+		System.out.println("init....................cancelForwardHotelBooking");
+		return request ->  doExecute(cancelForwardHotelBookingFunc,request );
+			
+	}
+	
+	@Bean
+	public Function<ComeInAPIRequest, ComeInAPIResponse> initBookingById() throws Exception{
+		System.out.println("init....................initBookingById");
+		return request ->  doExecute(initBookingByIdFunc,request );
 			
 	}
 	
