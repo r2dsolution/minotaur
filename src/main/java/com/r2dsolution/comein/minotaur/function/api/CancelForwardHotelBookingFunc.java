@@ -18,7 +18,7 @@ public class CancelForwardHotelBookingFunc extends ComeInFunction{
 	BookingInfoRepository repo;
 
 	@Override
-	public ComeInAPIResponse execute(ComeInAPIRequest request) throws Exception {
+	public ComeInAPIResponse doExecute(ComeInAPIRequest request) throws Exception {
 		Map<String,Object> output = new HashMap<String,Object>();
 		String bookNO = request.toQueryStr("book-no");
 		

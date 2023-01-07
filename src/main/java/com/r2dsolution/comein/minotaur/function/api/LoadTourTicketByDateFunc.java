@@ -31,7 +31,7 @@ public class LoadTourTicketByDateFunc extends ComeInFunction{
 	ComeInMapper comeInMapper;
 
 	@Override
-	public ComeInAPIResponse execute(ComeInAPIRequest request) throws Exception{
+	public ComeInAPIResponse doExecute(ComeInAPIRequest request) throws Exception{
 		
 //		TourTicketViewRepository repo = ctx.getBean(TourTicketViewRepository.class);
 //		

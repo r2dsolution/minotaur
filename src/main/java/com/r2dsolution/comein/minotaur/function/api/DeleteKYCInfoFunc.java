@@ -30,7 +30,7 @@ public class DeleteKYCInfoFunc extends ComeInFunction{
 	ViewKYCBookingDelegate viewKYCBookingDelegate;
 
 	@Override
-	public ComeInAPIResponse execute(ComeInAPIRequest request) throws Exception {
+	public ComeInAPIResponse doExecute(ComeInAPIRequest request) throws Exception {
 		String ownerId = request.getProfile().getComeinId();
 		
 		Map<String,Object> input = request.getJsonBody();

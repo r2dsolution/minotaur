@@ -25,6 +25,8 @@ public class ComeInAPIRequest extends APIGatewayProxyRequestEvent{
 	private static final long serialVersionUID = 1L;
 	
 	private Map<String,Object> jsonBody = new HashMap<String,Object>();
+	
+	private String heartbeat;
 
 	
 	public Map<String, Object> getJsonBody() {
@@ -51,6 +53,14 @@ public class ComeInAPIRequest extends APIGatewayProxyRequestEvent{
 	
 	public String toQueryStr(String key) {
 		return toQuery(key,String.class);
+	}
+
+	public String getHeartbeat() {
+		return heartbeat;
+	}
+
+	public void setHeartbeat(String heartbeat) {
+		this.heartbeat = heartbeat;
 	}
 	
 }

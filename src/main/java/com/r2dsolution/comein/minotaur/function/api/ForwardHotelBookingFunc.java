@@ -26,7 +26,7 @@ public class ForwardHotelBookingFunc extends ComeInFunction{
 	BookingService service;
 
 	@Override
-	public ComeInAPIResponse execute(ComeInAPIRequest request) throws Exception {
+	public ComeInAPIResponse doExecute(ComeInAPIRequest request) throws Exception {
 		
 		Map<String,Object> input = request.getJsonBody();
 		Map<String,Object> output = new HashMap<String,Object>();

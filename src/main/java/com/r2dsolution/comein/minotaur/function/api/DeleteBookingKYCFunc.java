@@ -26,7 +26,7 @@ public class DeleteBookingKYCFunc extends ComeInFunction{
 	ViewKYCBookingDelegate viewKYCBookingDelegate;
 
 	@Override
-	public ComeInAPIResponse execute(ComeInAPIRequest request) throws Exception {
+	public ComeInAPIResponse doExecute(ComeInAPIRequest request) throws Exception {
 		String bookno = request.toQueryStr("book-no");
 		Map<String,Object> input = request.getJsonBody();
 		Map<String,Object> output = new HashMap<String,Object>();

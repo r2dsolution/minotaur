@@ -24,7 +24,7 @@ public class LoadBookedTourTicketFunc  extends ComeInFunction{
 	ComeInMapper comeInMapper;
 	
 	@Override
-	public ComeInAPIResponse execute(ComeInAPIRequest request) throws Exception {
+	public ComeInAPIResponse doExecute(ComeInAPIRequest request) throws Exception {
 		try {
 		
 			Map<String,Object> input = request.getJsonBody();

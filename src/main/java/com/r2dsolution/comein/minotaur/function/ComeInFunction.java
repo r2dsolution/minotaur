@@ -11,6 +11,7 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.r2dsolution.comein.minotaur.function.model.ComeInAPIRequest;
 import com.r2dsolution.comein.minotaur.function.model.ComeInAPIResponse;
 
 public abstract class ComeInFunction implements IFunction{
@@ -64,5 +65,23 @@ public abstract class ComeInFunction implements IFunction{
 	}
 	
 	
+	protected abstract ComeInAPIResponse doExecute(ComeInAPIRequest request) throws Exception ;
+	
+	
+	@Override
+	public ComeInAPIResponse execute(ComeInAPIRequest request) throws Exception {
+		
+		if (request.getHeartbeat()!=null && !request.getHeartbeat().trim().equals("")) {
+			Map<String,Object> result = new HashMap<String,Object>();
+			result.put("message", "service is up!");
+			ComeInAPIResponse res = new ComeInAPIResponse();
+			res.setBody("service is up!");
+			res.setJsonBody(result);
+			res.setHeaders(initJsonHeaders());
+			res.setStatusCode(SC_OK);
+			return res;
+		}
+		return doExecute(request);
+	}
 
 }

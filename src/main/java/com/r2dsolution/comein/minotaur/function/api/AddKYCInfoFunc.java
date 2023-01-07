@@ -27,7 +27,7 @@ public class AddKYCInfoFunc   extends ComeInFunction{
 	AdminCognitoClient client;
 
 	@Override
-	public ComeInAPIResponse execute(ComeInAPIRequest request) throws Exception {
+	public ComeInAPIResponse doExecute(ComeInAPIRequest request) throws Exception {
 		//String profile_email = input.getProfile().getEmail();
 		Map<String,Object> output = new HashMap<String,Object>();
 		Map<String,Object> input = request.getJsonBody();

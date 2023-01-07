@@ -24,7 +24,7 @@ public class ReserveTourBookingFunc  extends ComeInFunction{
 	SimpleQueueServiceClient client;
 	
 	@Override
-	public ComeInAPIResponse execute(ComeInAPIRequest request) throws Exception {
+	public ComeInAPIResponse doExecute(ComeInAPIRequest request) throws Exception {
 		try {
 		
 			Map<String,Object> input = request.getJsonBody();

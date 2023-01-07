@@ -19,7 +19,7 @@ public class InitBookingByIdFunc extends ComeInFunction{
 	InitBookingByIdDelegate initBookingByIdDelegate;
 	
 	@Override
-	public ComeInAPIResponse execute(ComeInAPIRequest request) throws Exception {
+	public ComeInAPIResponse doExecute(ComeInAPIRequest request) throws Exception {
 		
 		Map<String,Object> input = request.getJsonBody();
 		Map<String,Object> output = new HashMap<String,Object>();

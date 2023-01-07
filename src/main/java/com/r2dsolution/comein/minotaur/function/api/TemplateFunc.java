@@ -13,7 +13,7 @@ import com.r2dsolution.comein.minotaur.function.model.ComeInAPIResponse;
 public class TemplateFunc  extends ComeInFunction{
 	
 	@Override
-	public ComeInAPIResponse execute(ComeInAPIRequest request) throws Exception {
+	public ComeInAPIResponse doExecute(ComeInAPIRequest request) throws Exception {
 		try {
 		
 			Map<String,Object> input = request.getJsonBody();
