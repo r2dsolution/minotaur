@@ -90,11 +90,13 @@ public class BookingInfoM implements Serializable{
 	Map<String,BookingKYCInfoM> kycInfo = new HashMap<String,BookingKYCInfoM>();
 	
 	public void addBookingKYC(BookingKYCInfoM bookKYC) {
+		bookKYC.setBookingInfo(this);
 	//	bookKYC.setBookingId( AggregateReference.to(this.id));
 		kycInfo.put(bookKYC.getRefId(), bookKYC);
 	}
 	
 	public void removeBookingKYC(BookingKYCInfoM bookKYC) {
+		bookKYC.setBookingInfo(null);
 		this.getKycInfo().remove(bookKYC.getRefId());
 	}
 	public void removeBookingKYC(String refId) {
