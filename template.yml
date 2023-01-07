@@ -891,7 +891,7 @@ Resources:
       ParentId: !GetAtt 
         - ComeInRestApi
         - RootResourceId
-      PathPart: kyc-hotel-bookings
+      PathPart: kyc-hotel-booking
 
   ViewKYCHotelBookingMethod:
     Type: AWS::ApiGateway::Method
